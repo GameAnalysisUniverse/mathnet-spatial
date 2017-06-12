@@ -3,13 +3,13 @@
 namespace MathNet.Spatial.Euclidean
 {
     [Serializable]
-    public struct Circle3D
+    public struct Circl3D
     {
         public readonly Point3D CenterPoint;
         public readonly UnitVector3D Axis;
         public readonly double Radius;
 
-        public Circle3D(Point3D centerPoint, UnitVector3D axis, double radius)
+        public Circl3D(Point3D centerPoint, UnitVector3D axis, double radius)
         {
             this.CenterPoint = centerPoint;
             this.Axis = axis;
@@ -22,7 +22,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="p1">First point on the circumference of the circle</param>
         /// <param name="p2">Second point on the circumference of the circle</param>
         /// <param name="axis">Direction of the plane in which the circle lies</param>
-        public Circle3D(Point3D p1, Point3D p2, UnitVector3D axis)
+        public Circl3D(Point3D p1, Point3D p2, UnitVector3D axis)
         {
             this.CenterPoint = Point3D.MidPoint(p1, p2);
             this.Axis = axis;
@@ -35,7 +35,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="p1"></param>
         /// <param name="p2"></param>
         /// <param name="p3"></param>
-        public Circle3D(Point3D p1, Point3D p2, Point3D p3)
+        public Circl3D(Point3D p1, Point3D p2, Point3D p3)
         {
             https://www.physicsforums.com/threads/equation-of-a-circle-through-3-points-in-3d-space.173847/
             Vector3D p1p2 = p2 - p1;

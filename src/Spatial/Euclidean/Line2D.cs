@@ -1,6 +1,6 @@
 ﻿using System;
-using MathNet.Numerics;
 using MathNet.Spatial.Units;
+using MathNet.Numerics;
 
 namespace MathNet.Spatial.Euclidean
 {

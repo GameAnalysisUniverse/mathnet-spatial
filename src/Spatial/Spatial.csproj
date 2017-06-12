@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MathNet.Spatial</RootNamespace>
     <AssemblyName>MathNet.Spatial</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>false</SignAssembly>
     <TargetFrameworkProfile />
@@ -24,6 +24,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\out\lib-debug\Net40\</OutputPath>
@@ -35,10 +36,16 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics, Version=3.19.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MathNet.Numerics.3.19.0\lib\net40\MathNet.Numerics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Euclidean\Circle2D.cs" />
     <Compile Include="Euclidean\EulerAngles.cs" />
     <Compile Include="Euclidean\Line2D.cs" />
     <Compile Include="Euclidean\Matrix2D.cs" />
@@ -54,7 +62,15 @@
     <Compile Include="Euclidean\Polygon2D.cs" />
     <Compile Include="Euclidean\PolyLine2D.cs" />
     <Compile Include="Euclidean\PolyLine3D.cs" />
+    <Compile Include="Euclidean\Rectangle2D.cs" />
     <Compile Include="Euclidean\Vector2D.cs" />
+    <Compile Include="Functions\BresenhamAlgorithm.cs" />
+    <Compile Include="Functions\DistanceFunctions.cs" />
+    <Compile Include="Functions\FOVFunctions.cs" />
+    <Compile Include="Functions\GridFunctions.cs" />
+    <Compile Include="Interfaces\IArithmetic.cs" />
+    <Compile Include="Interfaces\IClusterable.cs" />
+    <Compile Include="Interfaces\IOrderer.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
     <Compile Include="Projective\Vector3DHomogeneous.cs" />
@@ -81,19 +97,13 @@
     <Compile Include="XmlExt.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Spatial.csproj.paket.references" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.0'">
-      <ItemGroup>
-        <Reference Include="MathNet.Numerics">
-          <HintPath>..\..\packages\MathNet.Numerics\lib\net40\MathNet.Numerics.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.0'" />
   </Choose>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v3.5'">

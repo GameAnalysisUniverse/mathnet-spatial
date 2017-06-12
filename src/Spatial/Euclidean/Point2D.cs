@@ -224,6 +224,11 @@ namespace MathNet.Spatial.Euclidean
             return otherPoint - this;
         }
 
+        public double[] getAsDoubleArray()
+        {
+            return new double[] { X, Y };
+        }
+
         public double DistanceTo(Point2D otherPoint)
         {
             var vector = this.VectorTo(otherPoint);
