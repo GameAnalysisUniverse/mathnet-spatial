@@ -14,15 +14,72 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public readonly Point2D UpperLeftPoint;
 
-        private readonly double Height;
+        public double X => UpperLeftPoint.X;
+        public double Y => UpperLeftPoint.Y;
 
-        private readonly double Width;
+        public readonly double Height;
+
+        public readonly double Width;
+
+        public float Right
+        {
+            get { return (float)(X + Width); }
+        }
+
+        public float Left
+        {
+            get { return (float)(X); }
+        }
+
+        public float Top
+        {
+            get { return (float)(Y); }
+        }
+
+        public float Bottom
+        {
+            get { return (float)(Y + Height); }
+        }
+
+        public Line2D RectangleDiagonal
+        {
+            get { return new Line2D(UpperLeftPoint, new Point2D(X + Width, Y + Height)); }
+        }
+
+        public Point2D Center
+        {
+            get { return new Point2D(UpperLeftPoint.X + Width / 2, UpperLeftPoint.Y + Height / 2); }
+        }
+
+        public float Size
+        {
+            get { return (float)(Width*Height); }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        public Rectangle2D(double x, double y, double width, double height)
+        {
+            this.UpperLeftPoint = new Point2D(x, y);
+            this.Width = width;
+            this.Height = height;
+
+            if (this.Width == 0 || this.Height == 0)
+            {
+                throw new ArgumentException("A rectangle cannot be empty (a point)");
+            }
+        }
 
         /// <summary>
-        /// Constructor for the Rectangle2D
+        /// 
         /// </summary>
-        /// <param name="startPoint">the Upper left point of the line</param>
-
+        /// <param name="upperLeftPoint"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public Rectangle2D(Point2D upperLeftPoint, double width, double height)
         {
             this.UpperLeftPoint = upperLeftPoint;
@@ -35,19 +92,14 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
-        public System.Drawing.Rectangle getAsQuadTreeRect()
-        {
-            return new System.Drawing.Rectangle((int)X, (int)Y, (int)Width, (int)Height);
-        }
 
         /// <summary>
-        /// Intersection of a line with a rect. -> perform 4 line tests.
+        /// 
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        /// <param name="r"></param>
-        /// <returns></returnsV
-        public Point3D? Rect2DIntersectsLine(Point2D start, Point2D end)
+        /// <returns></returns>
+        public Point2D? Rect2DIntersectsLine(Point2D start, Point2D end)
         {
             var r = this;
             // Build all lines of the Rectangle and test a line-line collision
@@ -68,12 +120,19 @@ namespace MathNet.Spatial.Euclidean
             if (l4 != null) ps.Add(i4);
             if (ps.Count == 0) return null;
             if (ps.Count > 2) throw new Exception("Too many collisions");
-            return ps.OrderBy(point => DistanceFunctions.GetEuclidDistance2D(start, point)).First().ToPoint3D(); // Return point with lowest distance to p1
+            return ps.OrderBy(point => DistanceFunctions.GetEuclidDistance2D(start, point)).First(); // Return point with lowest distance to p1
         }
 
+        /// <summary>
+        /// Test if a rectangle contains a point
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public bool Contains(Point2D p)
         {
-            return true;
+            if (p.X >= X && p.X <= X + Width && p.Y >= Y && p.Y <= Y + Height)
+                return true;
+            else return false;
         }
 
         /// <summary>
@@ -82,10 +141,10 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static bool Intersects(Rectangle2D a, Rectangle2D b)
+        public bool Intersects(Rectangle2D b)
         {
-            if (b.X < a.X+a.Width && a.X < b.X+b.Width && b.Y < a.Y+a.Height)
-                return a.Y < b.Y+b.Height;
+            if (b.X < X + Width && X < b.X + b.Width && b.Y < Y + Height)
+                return Y < b.Y + b.Height;
             return false;
         }
 
@@ -95,17 +154,20 @@ namespace MathNet.Spatial.Euclidean
 
         }
 
-        public double X => UpperLeftPoint.X;
-        public double Y => UpperLeftPoint.Y;
-
-        public Point2D Center
+        /// <summary>
+        /// Rect is entirely contained in the rectangle 
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
+        public bool Contains(Rectangle2D rect)
         {
-            get
-            {
-                return
-                    new Point2D(UpperLeftPoint.X + Width / 2, UpperLeftPoint.Y + Height / 2);
+            if (rect.Size > Size) return false; // A bigger rectangle cannot entirely be contained in this one
+            //If we have a rectangle at the same reference point and it has smaller dimension
+            if (UpperLeftPoint.Equals(rect.UpperLeftPoint) && rect.Width <= Width && rect.Height <= Height) return true;
+            //Only if all four edge points are within the rectangle - rect is in the rectangle entirely
+            if (Contains(UpperLeftPoint) && Contains(new Point2D(X + Width, Y)) && Contains(new Point2D(X + Width, Y+Height)) && Contains(new Point2D(X , Y+Height))) return true;
 
-            }
+            return false;
         }
     }
 }
