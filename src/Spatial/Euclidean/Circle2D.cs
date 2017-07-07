@@ -32,6 +32,31 @@ namespace MathNet.Spatial.Euclidean
         public double Circumference => 2 * Math.PI * Radius;
         public double Area => Math.PI * Math.Pow(Radius, 2);
 
+        public bool Intersects(Circle2D c)
+        {
+            if (DistanceFunctions.GetEuclidDistance2D(CenterPoint, c.CenterPoint) <= c.Radius + Radius)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public bool IntersectsRectangle2D(Rectangle2D r)
+        {
+            if (r.Contains(CenterPoint))
+                return true;
+            var b1 = IntersectsLine2D(r.UpperLeftPoint, r.UpperLeftPoint + new Vector2D(r.Width, 0)); //UpperLine
+            var b2 = IntersectsLine2D(r.UpperLeftPoint, r.UpperLeftPoint + new Vector2D(0, r.Height)); //LeftLine
+            var b3 = IntersectsLine2D(r.UpperLeftPoint + new Vector2D(0, r.Height), r.UpperLeftPoint + new Vector2D(r.Width, 0)); //BottomLine
+            var b4 = IntersectsLine2D(r.UpperLeftPoint + new Vector2D(r.Width, r.Height), r.UpperLeftPoint + new Vector2D(r.Width, 0)); //RightLine
+            if (!b1 && !b2 && !b3 && !b4) return true;
+            return false;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -41,7 +66,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="actorpos">Position of a player</param>
         /// <param name="actorYaw">Sight direction of this player</param>
         /// <returns></returns>
-        public bool CircleIntersectsVector2D(Point2D actorpos, float actorYaw)
+        public bool IntersectsVector2D(Point2D actorpos, float actorYaw)
         {
             // Yaw has to be negated (csgo -> normal)
             var yawRad = Angle.FromDegrees(-actorYaw).Radians;
@@ -63,6 +88,37 @@ namespace MathNet.Spatial.Euclidean
             // compute the coordinates of the point E on line and closest to C
             var ex = t * dx + aimX;
             var ey = t * dy + aimY;
+
+            // compute the euclidean distance from E to C
+            var distanceEC = DistanceFunctions.GetEuclidDistance2D(new Point2D((float)ex, (float)ey), new Point2D(CenterPoint.X, CenterPoint.Y));
+
+            // test if the line intersects the circle
+            if (distanceEC < Radius)
+                return true;
+            else if (distanceEC == Radius) // line is tangent to circle
+                return true;
+            else // line doesnt touch circle
+                return false;
+        }
+
+        public bool IntersectsLine2D(Point2D start, Point2D end)
+        {
+
+            // compute the euclidean distance between actor and aim
+            var distanceActorAim = DistanceFunctions.GetEuclidDistance2D(start, end);
+
+            // compute the direction vector D from Actor to aimvector
+            var dx = (start.X - end.X) / distanceActorAim;
+            var dy = (start.Y - end.Y) / distanceActorAim;
+
+            // Now the line equation is x = dx*t + aimX, y = dy*t + aimY with 0 <= t <= 1.
+            // compute the value t of the closest point to the circle center C(sphereCenterX, sphereCenterY)
+            var t = dx * (CenterPoint.X - end.X) + dy * (CenterPoint.Y - end.Y);
+
+            // This is the projection of C on the line from actor to aim.
+            // compute the coordinates of the point E on line and closest to C
+            var ex = t * dx + end.X;
+            var ey = t * dy + end.Y;
 
             // compute the euclidean distance from E to C
             var distanceEC = DistanceFunctions.GetEuclidDistance2D(new Point2D((float)ex, (float)ey), new Point2D(CenterPoint.X, CenterPoint.Y));
