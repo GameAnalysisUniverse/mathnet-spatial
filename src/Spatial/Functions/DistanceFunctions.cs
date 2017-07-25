@@ -34,6 +34,7 @@ namespace MathNet.Spatial.Functions
         /// <returns></returns>
         public static double GetEuclidDistance2D(Vector2D p1, Vector2D p2)
         {
+            if (p2 == null || p1 == null) throw new Exception("Vector cant be null");
             return Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
         }
 
@@ -59,32 +60,6 @@ namespace MathNet.Spatial.Functions
             return Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2) + Math.Pow(p1.Z - p2.Z, 2));
         }
 
-        /// <summary>
-        /// Return the median of a list of float values
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static float GetMedian(IEnumerable<float> source)
-        {
-            float[] temp = source.ToArray();
-            Array.Sort(temp);
-
-            int count = temp.Length;
-            if (count == 0)
-            {
-                throw new InvalidOperationException("Empty collection");
-            }
-            else if (count % 2 == 0)
-            {
-                float a = temp[count / 2 - 1];
-                float b = temp[count / 2];
-                return (a + b) / 2.0f;
-            }
-            else
-            {
-                return temp[count / 2];
-            }
-        }
 
         /// <summary>
         /// 
@@ -103,7 +78,7 @@ namespace MathNet.Spatial.Functions
         /// <param name="p1"></param>
         /// <param name="p2"></param>
         /// <returns></returns>
-        public static double GetMaximusDistance2D(Point2D p1, Point2D p2)
+        public static double GetMaximumsDistance2D(Point2D p1, Point2D p2)
         {
             return Math.Max(Math.Abs(p1.X - p2.X), Math.Abs(p1.Y - p2.Y));
         }
@@ -113,33 +88,6 @@ namespace MathNet.Spatial.Functions
         // GENERIC VERSIONS
         //
         //
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static T GetMedian<T>(IEnumerable<T> source) where T : IArithmetic
-        {
-            // Create a copy of the input, and sort the copy
-            T[] temp = source.ToArray();
-            Array.Sort(temp); // @TODO: T needs to implement IComparable !!!
-
-            int count = temp.Length;
-            if (count == 0)
-                throw new InvalidOperationException("Empty collection");
-
-            else if (count % 2 == 0)
-            {
-                // count is even, average two middle elements
-                T a = temp[count / 2 - 1];
-                T b = temp[count / 2];
-                return a.Add(b).Bisect<T>();
-            }
-            else
-                return temp[count / 2]; // count is odd, return the middle element
-        }
 
         /// <summary>
         /// Returns euclid distance between p1 and p2
@@ -152,5 +100,19 @@ namespace MathNet.Spatial.Functions
             if (p2 == null || p1 == null) throw new Exception("Vector cant be null");
             return 0;
         }
+
+        /// <summary>
+        /// Returns manhattan distance between p1 and p2
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        public static double GetManhattanDistance<T>(T p1, T p2)
+        {
+            if (p2 == null || p1 == null) throw new Exception("Vector cant be null");
+            return 0;
+        }
+
+        
     }
 }

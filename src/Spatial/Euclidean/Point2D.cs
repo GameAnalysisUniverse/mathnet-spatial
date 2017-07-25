@@ -8,6 +8,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Units;
+using Newtonsoft.Json;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -17,11 +18,13 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
         /// </summary>
+        [JsonProperty]
         public readonly double X;
 
         /// <summary>
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
         /// </summary>
+        [JsonProperty]
         public readonly double Y;
 
         public Point2D(double x, double y)
@@ -36,7 +39,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="r"></param>
         /// <param name="a"></param>
         public Point2D(double r, Angle a)
-            : this(r*Math.Cos(a.Radians), r*Math.Sin(a.Radians))
+            : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
         {
         }
 
@@ -58,6 +61,12 @@ namespace MathNet.Spatial.Euclidean
         {
             get { return new Point2D(0, 0); }
         }
+
+        public double[] GetData()
+        {
+            return new double[] { X, Y };
+        }
+
 
         public static Point2D Parse(string value)
         {
@@ -106,7 +115,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Point3D operator -(Point2D point, Vector3D vector)
         {
-            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1*vector.Z);
+            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1 * vector.Z);
         }
 
         public static Vector2D operator -(Point2D lhs, Point2D rhs)
@@ -179,7 +188,7 @@ namespace MathNet.Spatial.Euclidean
         {
             unchecked
             {
-                return (this.X.GetHashCode()*397) ^ this.Y.GetHashCode();
+                return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
             }
         }
 
@@ -219,14 +228,18 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteAttribute("Y", this.Y);
         }
 
+        /// <summary>
+        /// return new Point3D(X, Y, 0);
+        /// </summary>
+        /// <returns>return new Point3D(X, Y, 0);</returns>
+        public Point3D ToPoint3D()
+        {
+            return new Point3D(this.X, this.Y, 0);
+        }
+
         public Vector2D VectorTo(Point2D otherPoint)
         {
             return otherPoint - this;
-        }
-
-        public double[] getAsDoubleArray()
-        {
-            return new double[] { X, Y };
         }
 
         public double DistanceTo(Point2D otherPoint)
@@ -240,14 +253,6 @@ namespace MathNet.Spatial.Euclidean
             return new Vector2D(this.X, this.Y);
         }
 
-        /// <summary>
-        /// return new Point3D(X, Y, 0);
-        /// </summary>
-        /// <returns>return new Point3D(X, Y, 0);</returns>
-        public Point3D ToPoint3D()
-        {
-            return new Point3D(this.X, this.Y, 0);
-        }
 
         /// <summary>
         ///

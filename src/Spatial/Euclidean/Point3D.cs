@@ -9,27 +9,29 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Units;
-using Clustering;
-using System.Collections;
+using Newtonsoft.Json;
 
 namespace MathNet.Spatial.Euclidean
 {
     [Serializable]
-    public struct Point3D : IXmlSerializable, IEquatable<Point3D>, IFormattable, IClusterable<double, Point3D>
+    public struct Point3D : IXmlSerializable, IEquatable<Point3D>, IFormattable
     {
         /// <summary>
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
         /// </summary>
+        [JsonProperty]
         public readonly double X;
 
         /// <summary>
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
         /// </summary>
+        [JsonProperty]
         public readonly double Y;
 
         /// <summary>
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
         /// </summary>
+        [JsonProperty]
         public readonly double Z;
 
         public Point3D(double x, double y, double z)
@@ -55,17 +57,22 @@ namespace MathNet.Spatial.Euclidean
 
         public Point3D ResetZ()
         {
-            return new Point3D(X,Y,0);
+            return new Point3D(X, Y, 0);
         }
 
         public Point3D ChangeZ(double newZ)
         {
-            return new Point3D(X, Y, Z+newZ);
+            return new Point3D(X, Y, Z + newZ);
         }
 
         public Point2D SubstractZ()
         {
             return new Point2D(X, Y);
+        }
+
+        public double[] GetData()
+        {
+            return new double[] { X, Y, Z };
         }
 
         /// <summary>
@@ -92,13 +99,13 @@ namespace MathNet.Spatial.Euclidean
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Matrix<double> left, Point3D right)
         {
-            return left*right.ToVector();
+            return left * right.ToVector();
         }
 
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Point3D left, Matrix<double> right)
         {
-            return left.ToVector()*right;
+            return left.ToVector() * right;
         }
 
         public override string ToString()
@@ -139,6 +146,7 @@ namespace MathNet.Spatial.Euclidean
 
         public override bool Equals(object obj)
         {
+
             if (ReferenceEquals(null, obj))
             {
                 return false;
@@ -152,8 +160,8 @@ namespace MathNet.Spatial.Euclidean
             unchecked
             {
                 var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Z.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
                 return hashCode;
             }
         }
@@ -268,6 +276,11 @@ namespace MathNet.Spatial.Euclidean
             return new Vector3D(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
         }
 
+        public static implicit operator Point3D(Point2D? v)
+        {
+            throw new NotImplementedException();
+        }
+
         // Not sure a ref to System.Windows.Media.Media3D is nice
         ////public static explicit operator Point3D(System.Windows.Media.Media3D.Point3D p)
         ////{
@@ -348,44 +361,5 @@ namespace MathNet.Spatial.Euclidean
             return Vector<double>.Build.Dense(new[] { X, Y, Z });
         }
 
-
-
-        public Point3D AddData(double[] v)
-        {
-            if(v.Length == 3)
-                return new Point3D(v[0], v[1], v[2]);
-
-            return new Point3D(v[0], v[1], 0);
-        }
-
-        public double[] GetDataAsArray()
-        {
-            return new double[] { X, Y };
-        }
-
-        public double DistanceFunction(Point3D t)
-        {
-            return this.DistanceTo(t);
-        }
-
-        public double Weight(Point3D t)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IOrderedEnumerable<Point3D> CreateOrderedEnumerable<TKey>(Func<Point3D, TKey> keySelector, IComparer<TKey> comparer, bool descending)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerator<Point3D> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

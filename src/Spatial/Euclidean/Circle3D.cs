@@ -1,12 +1,18 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace MathNet.Spatial.Euclidean
 {
     [Serializable]
     public struct Circl3D
     {
+        [JsonProperty]
         public readonly Point3D CenterPoint;
+
+        [JsonProperty]
         public readonly UnitVector3D Axis;
+
+        [JsonProperty]
         public readonly double Radius;
 
         public Circl3D(Point3D centerPoint, UnitVector3D axis, double radius)

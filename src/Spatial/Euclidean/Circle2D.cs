@@ -1,13 +1,17 @@
 ﻿using System;
 using MathNet.Spatial.Units;
 using MathNet.Spatial.Functions;
+using Newtonsoft.Json;
 
 namespace MathNet.Spatial.Euclidean
 {
     [Serializable]
     public struct Circle2D
     {
+        [JsonProperty]
         public readonly Point2D CenterPoint;
+
+        [JsonProperty]
         public readonly double Radius;
 
         public Circle2D(Point2D centerPoint, double radius)
@@ -25,7 +29,7 @@ namespace MathNet.Spatial.Euclidean
         public Circle2D(Point2D p1, Point2D p2)
         {
             this.CenterPoint = Point2D.MidPoint(p1, p2);
-            this.Radius = p1.DistanceTo(CenterPoint);
+            this.Radius = p1.ToPoint3D().DistanceTo(CenterPoint.ToPoint3D());
         }
 
         public double Diameter => 2 * Radius;

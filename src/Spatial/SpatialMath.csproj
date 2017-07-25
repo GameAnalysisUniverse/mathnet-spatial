@@ -25,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\out\lib-debug\Net40\</OutputPath>
@@ -38,10 +39,32 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>..\..\out\lib\Net40\MathNet.Spatial.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MathNet.Numerics, Version=3.19.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MathNet.Numerics.3.19.0\lib\net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\gau-encounterdetection\gau-encounterdetection\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,13 +87,12 @@
     <Compile Include="Euclidean\PolyLine3D.cs" />
     <Compile Include="Euclidean\Rectangle2D.cs" />
     <Compile Include="Euclidean\Vector2D.cs" />
-    <Compile Include="Functions\BresenhamAlgorithm.cs" />
     <Compile Include="Functions\DistanceFunctions.cs" />
     <Compile Include="Functions\FOVFunctions.cs" />
     <Compile Include="Functions\GridFunctions.cs" />
+    <Compile Include="Functions\KernelFunctions.cs" />
+    <Compile Include="Functions\StatisticalFunctions.cs" />
     <Compile Include="Interfaces\IArithmetic.cs" />
-    <Compile Include="Interfaces\IClusterable.cs" />
-    <Compile Include="Interfaces\IOrderer.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
     <Compile Include="Projective\Vector3DHomogeneous.cs" />

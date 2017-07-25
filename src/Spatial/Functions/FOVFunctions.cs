@@ -29,8 +29,8 @@ namespace MathNet.Spatial.Functions
 
             var aimdx = aimX - actorV.X;
             var aimdy = aimY - actorV.Y;
-            Vector2D aimvec = new Vector2D(new double[] { aimdx, aimdy, 0 });
-            Vector2D recvec = new Vector2D(new double[] { dx, dy, 0 });
+            Vector2D aimvec = new Vector2D(new double[] { aimdx, aimdy });
+            Vector2D recvec = new Vector2D(new double[] { dx, dy });
             double theta = aimvec.DotProduct(recvec);
             double radian_theta = Math.Acos(theta);
             double degree_theta = 0;
